@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "coconut_cli"
-version = "0.1.0"
+name = "coconut-cli"
+version = "0.1.2"
 description = ""
 authors = ["Arpan Pandey <arpan@hackersreboot.tech>"]
 
