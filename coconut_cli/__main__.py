@@ -2,6 +2,8 @@ from rich import print
 import pyfiglet
 import inquirer
 import json
+import requests
+import urllib.parse
 
 def sub_cat(main_category: str):
     choices = []
@@ -173,10 +175,28 @@ def main():
     print(f"[green]Generating a pickup line for {answers['name']}...")
 
 
-    with open('coconut_back/lines.json') as f:
+    with open('coconut_cli/lines.json') as f:
         data = json.load(f)
 
     print(f"[blue]Here is your pickup line: [orange1]{data[answers['main_category']][sub_category]}")
+
+    q = [inquirer.Confirm('postcard', message="Do you want to generate a postcard?")]
+
+    ans = inquirer.prompt(q)
+
+    if ans['postcard']:
+        print("[green]Generating postcard...")
+        url = f"https://coconut.up.railway.app/postcard?name={urllib.parse.quote(answers['name'])}&gender={urllib.parse.quote(answers['gender'])}&picline={urllib.parse.quote(data[answers['main_category']][sub_category])}"
+        r = requests.get(url)
+
+        if r.status_code != 200:
+            print("[red]Something went wrong while generating the postcard. Please try again later.")
+            return
+
+        with open('postcard.png', 'wb') as f:
+            f.write(r.content)
+
+        print("[green]Postcard generated! Check out postcard.png")
 
 
 if __name__ == "__main__":
