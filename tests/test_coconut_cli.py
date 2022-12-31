@@ -1,4 +1,4 @@
-from coconut_back import __version__
+from coconut_cli import __version__
 
 
 def test_version():
